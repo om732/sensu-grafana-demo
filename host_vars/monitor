@@ -1,0 +1,22 @@
+#
+# sensu settings
+#
+sensu_subscriptions:
+    - resource
+    - rabbitmq
+    - elasticsearch
+    - apache
+    - nginx
+
+sensu_params:
+    resource:
+        load_warn: "5,3,3"
+        load_crit: "10,6,6"
+        disk_warn: 70
+        disk_crit: 80
+        swap_warn: 90
+        swap_crit: 70
+    elasticsearch:
+        host: "127.0.0.1"
+        port: "9200"
+        timeout: 30

@@ -1,0 +1,40 @@
+---
+## TODO create nginx repo
+- name: create nginx repository
+  template: src=nginx.repo dest=/etc/yum.repos.d/
+
+## TODO installed nginx
+- name: install nginx
+  yum: name=nginx enablerepo=nginx state=present
+
+- name: install python-passlib
+  yum: name=python-passlib state=present
+
+## TODO configure nginx
+- name: create directory
+  file: dest=/etc/nginx/{{ item }} state=directory
+  with_items:
+    - bizconf
+    - listen.d
+
+- name: copy nginx.conf
+  template: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+
+- name: copy include files
+  template: src={{ item }} dest=/etc/nginx/bizconf/{{ item }}
+  with_items:
+    - gzip.conf
+    - proxy.conf
+  notify: restart nginx
+
+- name: copy vh files
+  template: src={{ item }}.j2 dest=/etc/nginx/listen.d/{{ item }}
+  with_items:
+    - graph-vh.conf
+    - sensu-vh.conf
+  notify: restart nginx
+
+## TODO started nginx
+- name: start nginx
+  service: name=nginx state=started enabled=yes

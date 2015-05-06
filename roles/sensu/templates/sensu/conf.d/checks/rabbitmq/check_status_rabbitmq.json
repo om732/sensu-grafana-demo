@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_status_rabbitmq": {
+      "command": "rabbitmq-alive.rb",
+      "subscribers": [
+        "rabbitmq"
+      ],
+      "handlers": [
+        "mailer-crit"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "RabbitMQのステータス監視"
+    }
+  }
+}

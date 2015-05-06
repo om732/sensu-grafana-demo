@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_memory": {
+      "type": "metric",
+      "command": "memory-metrics.rb",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "メモリー情報の取得"
+    }
+  }
+}

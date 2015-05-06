@@ -1,0 +1,8 @@
+{
+{% include "parts/rabbitmq.json.j2" %},
+{% if sensu_install_server %}
+{% include "parts/redis.json.j2" %},
+{% include "parts/api.json.j2" %},
+{% endif %}
+{% include "parts/client.json.j2" %}
+}

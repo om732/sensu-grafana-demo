@@ -1,0 +1,25 @@
+#
+# sensu settings
+#
+sensu_subscriptions:
+    - resource
+    - java
+    - tomcat
+
+sensu_params:
+    resource:
+        load_warn: "5,3,3"
+        load_crit: "10,6,6"
+        disk_warn: 70
+        disk_crit: 80
+        swap_warn: 90
+        swap_crit: 70
+    java:
+        jolokia_url: "localhost:8778"
+        heapmemory_warn: 85
+        heapmemory_crit: 90
+
+#
+# Tomcat
+#
+tomcat_install: true

@@ -1,0 +1,29 @@
+---
+sensu_install_server: true
+sensu_rabbitmq_host: 127.0.0.1
+sensu_redis_host: 127.0.0.1
+sensu_api_host: 127.0.0.1
+
+sensu_yum_installed:
+  - sysstat
+  - libxml2-devel
+  - libxslt-devel
+
+sensu_gem_installed:
+  - rest-client
+  - inifile
+  - mail
+
+sensu_alert_subject: "[demo]"
+sensu_alert_from: "sensu@localhost"
+sensu_alert_to_emerg: "root"
+sensu_alert_to_crit: "root"
+sensu_alert_to_warn: "root"
+
+
+graphite_storage_schem: 300s:90d
+
+elasticsearch_url: http://127.0.0.1:9200
+graphite_web_url: http://127.0.0.1:8080/
+grafana_url: http://127.0.0.1:8080/grafana/
+uchiwa_url: http://127.0.0.1:3000/

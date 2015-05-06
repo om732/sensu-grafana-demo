@@ -1,0 +1,64 @@
+---
+#
+# 初回実行時の事前準備
+# SSL証明書に関するファイルの生成をローカルで実行してください。
+#
+# -----
+# cd /var/tmp
+# wget http://sensuapp.org/docs/0.13/tools/ssl_certs.tar
+# tar xf ssl_certs.tar
+# cd ssl_certs
+# ./ssl_certs.sh generate
+# mv sensu_ca/cacert.pem /opt/ansible/roles/sensu-server/templates/etc/rabbitmq/ssl/
+# mv server/cert.pem /opt/ansible/roles/sensu-server/templates/etc/rabbitmq/ssl/server-cert.pem
+# mv server/key.pem /opt/ansible/roles/sensu-server/templates/etc/rabbitmq/ssl/server-key.pem
+# mv client/cert.pem /opt/ansible/roles/sensu-server/templates/etc/sensu/ssl/client-cert.pem
+# mv client/key.pem /opt/ansible/roles/sensu-server/templates/etc/sensu/ssl/client-key.pem
+# -----
+#
+
+## erlangのインストール
+- name: install erlang
+  yum: name=erlang enablerepo=epel state=present
+
+## RabbitMQのインストール
+- name: install RabbitMQ
+  yum: name=http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.1/rabbitmq-server-3.2.1-1.noarch.rpm state=present
+
+## sslディレクトリの作成
+- name: create ssl dir
+  file: dest=/etc/rabbitmq/ssl state=directory
+
+## SSL通信関連のファイル設置
+- name: set cacert.pem
+  copy: src=rabbitmq/ssl/{{ item }}.pem dest=/etc/rabbitmq/ssl/{{ item }}.pem
+  with_items:
+    - cacert
+    - cert
+    - key
+
+## 設定ファイルの設置
+- name: set rabbitmq.config
+  template: src=rabbitmq/rabbitmq.config dest=/etc/rabbitmq/rabbitmq.config
+
+## rabbitmq_managementの有効化
+- name: enable rabbitmq_management
+  shell: rabbitmq-plugins enable rabbitmq_management
+  notify: restart rabbitmq server
+
+## rabbitmqの起動
+- name: start rabbitmq
+  service: name=rabbitmq-server state=started enabled=yes
+
+## credentialsの作成
+- name: credentials add vhost
+  shell: rabbitmqctl add_vhost /sensu
+  ignore_errors: yes
+
+- name: credentials add user
+  shell: rabbitmqctl add_user sensu sensu
+  ignore_errors: yes
+
+- name: credentials set permissions
+  shell: rabbitmqctl set_permissions -p /sensu sensu ".*" ".*" ".*"
+  ignore_errors: yes

@@ -1,0 +1,15 @@
+- name: (rhel) install packages
+  yum: name={{ item }} state=present
+  with_items:
+      - vim-enhanced
+      - wget
+      - ncurses-devel
+  when: ansible_os_family == "RedHat"
+
+- name: (debian) install packages
+  apt: name={{ item }} state=present
+  with_items:
+      - vim-enhanced
+      - wget
+      - ncurses-devel
+  when: ansible_os_family == "Debian"

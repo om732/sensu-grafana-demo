@@ -1,0 +1,6 @@
+[sensu-server]
+monitor
+
+[sensu-clients]
+client1
+client2

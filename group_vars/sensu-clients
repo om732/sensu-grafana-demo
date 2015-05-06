@@ -1,0 +1,13 @@
+---
+sensu_install_server: false
+
+sensu_yum_installed:
+  - sysstat
+
+sensu_apt_installed:
+  - sysstat
+
+sensu_gem_installed:
+  - rest-client
+
+sensu_rabbitmq_host: 192.168.33.20

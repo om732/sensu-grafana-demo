@@ -1,0 +1,17 @@
+---
+# Usage: ansible-playbook -i inventories/hosts sensu-server.yml
+#
+# 実行前に以下を実施すること
+# 1. group_vars/sensu-server の設定
+# 2. host_vars/monitor の設定
+#
+
+- name: Sensu Server
+  hosts: sensu-server
+  sudo: yes
+  user: vagrant
+  gather_facts: on
+  roles:
+    - base
+    - graphite
+    - sensu

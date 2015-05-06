@@ -1,0 +1,112 @@
+---
+## (RHEL系)レポジトリの追加
+- name: (rhel) add sensu repository
+  copy: src=sensu.repo dest=/etc/yum.repos.d/sensu.repo
+  when: ansible_os_family == "RedHat"
+
+## (RHEL系)sensuのインストール
+- name: (rhel) install sensu
+  yum: name=sensu enablerepo=sensu state=present
+  when: ansible_os_family == "RedHat"
+
+## (Debian系)keyの追加
+- name: (debian) add repository key
+  apt_key: url=http://repos.sensuapp.org/apt/pubkey.gpg state=present
+  when: ansible_os_family == "Debian"
+
+## (Debian系)レポジトリの追加
+- name: (debian) add sensu repository
+  copy: src=sensu.list dest=/etc/apt/sources.list.d/sensu.list
+  when: ansible_os_family == "Debian"
+
+## (Debian系)repositoryのアップデート
+- name: (debian) update repository
+  apt: update_cache=yes
+  when: ansible_os_family == "Debian"
+
+## (Debian系)sensuのインストール
+- name: (debian) install sensu
+  apt: name=sensu state=present
+  when: ansible_os_family == "Debian"
+
+## embeded rubyを使うように設定
+- name: configure embedded ruby
+  lineinfile: dest=/etc/default/sensu regexp=^EMBEDDED_RUBY= line=EMBEDDED_RUBY=true
+  notify:
+    - restart sensu server
+    - restart sensu client
+
+## sslディレクトリの作成
+- name: create ssl dir
+  file: dest=/etc/sensu/ssl state=directory
+
+## クライアント証明書の設置
+- name: set pem files
+  copy: src=sensu/ssl/{{ item }}.pem dest=/etc/sensu/ssl/{{ item }}.pem
+  with_items:
+    - cert
+    - key
+
+## config.jsonの設置
+- name: set client config.json
+  template: src=sensu/sensu-config-files/config.json.j2 dest=/etc/sensu/config.json
+  notify:
+    - restart sensu server
+    - restart sensu client
+
+## plugins以下の設置
+- name: set plugins files
+  action: synchronize src=sensu/plugins/ dest=/etc/sensu/plugins/ archive=yes delete=yes rsync_path='sudo rsync'
+
+## conf.d handlers mutators 以下の設置
+- name: set configure files
+  action: synchronize src=sensu/{{ item }}/ dest=/etc/sensu/{{ item }}/ archive=yes delete=yes rsync_path='sudo rsync'
+  with_items:
+    - conf.d
+    - handlers
+    - mutators
+  when: sensu_install_server == true
+  notify:
+    - restart sensu server
+    - restart sensu client
+
+## handler以下の環境別設定があるファイルの設置
+- name: set handlers file
+  template: src=sensu/conf.d/handlers/{{ item }}.json dest=/etc/sensu/conf.d/handlers/{{ item }}.json
+  with_items:
+    - mailer
+  when: sensu_install_server == true
+
+## (RHEL系)pluginで利用するパッケージのインストール
+- name: installed yum packages
+  yum: name={{ item }} enablerepo=epel state=present
+  with_items:
+    - "{{ sensu_yum_installed }}"
+  when: ansible_os_family == "RedHat"
+
+## (Debian系)pluginで利用するパッケージのインストール
+- name: installed apt packages
+  apt: name={{ item }} state=present
+  with_items:
+    - "{{ sensu_apt_installed }}"
+  when: ansible_os_family == "Debian"
+
+## gemのインストール
+- name: installed gem library
+  gem: name={{ item }} state=present executable=/opt/sensu/embedded/bin/gem user_install=no
+  with_items:
+    - "{{ sensu_gem_installed }}"
+
+## sensu-serverの起動
+- name: start sensu-server
+  service: name=sensu-server state=started enabled=yes
+  when: sensu_install_server == true
+
+## sensu-apiの起動
+- name: start sensu-api
+  service: name=sensu-api state=started enabled=yes
+  when: sensu_install_server == true
+
+## sensu-clientの起動
+- name: start sensu-client
+  service: name=sensu-client state=started enabled=yes

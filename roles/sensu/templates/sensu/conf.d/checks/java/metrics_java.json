@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_java_heapmemory": {
+      "type": "metric",
+      "command": "jolokia-metrics.rb -u :::java.jolokia_url:::",
+      "subscribers": [
+        "java"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "Javaのメトリクス情報取得"
+    }
+  }
+}

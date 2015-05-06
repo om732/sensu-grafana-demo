@@ -1,0 +1,16 @@
+---
+## JDKのインストール
+- name: install openjdk
+  yum: name=java-1.7.0-openjdk state=present
+
+## RPMパッケージの設置
+- name: set elasticsearch package
+  copy: src=elasticsearch-1.3.2.noarch.rpm dest=/usr/local/src/
+
+## ElasticSearchのインストール
+- name: install elasticsearch
+  yum: name=/usr/local/src/elasticsearch-1.3.2.noarch.rpm state=present
+
+## carbonの起動
+- name: start elasticsearch
+  service: name=elasticsearch state=started enabled=yes

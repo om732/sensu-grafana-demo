@@ -1,0 +1,20 @@
+  "client": {
+    "name": "{{ inventory_hostname }}",
+    "address": "{{ ansible_eth0["ipv4"]["address"] }}",
+    "keepalive": {
+      "thresholds": {
+        "warning": 60,
+        "critical":180
+      },
+      "handlers": [
+        "default"
+      ]
+    },
+    "subscriptions": [ "{{ "\", \"".join(sensu_subscriptions) }}" ]{% if sensu_params is defined %},
+    {% for k,v in sensu_params.iteritems() -%}
+        "{{ k }}": {{ v|replace("'", "\"") }}{% if not loop.last %},{% endif %}
+
+    {% endfor -%}
+    {% endif %}
+  }
+

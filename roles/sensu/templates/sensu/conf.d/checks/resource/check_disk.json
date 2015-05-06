@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_disk": {
+      "command": "check-disk.rb -w :::resource.disk_warn::: -c :::resource.disk_crit:::",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "mailer-crit"
+      ],
+      "interval": 60,
+      "occurrences": 1,
+      "refresh": 86400,
+      "custom_summary": "ディスク使用率の監視"
+    }
+  }
+}

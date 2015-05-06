@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_load": {
+      "type": "metric",
+      "command": "load-metrics.rb",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "ロードアベレージの取得"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+---
+## Grafanaがインストールされているか確認
+- name: check installed grafana
+  stat: path=/opt/grafana/config.js
+  register: file_exists
+
+- name: get grafana tarball
+  get_url: url=http://grafanarel.s3.amazonaws.com/grafana-1.8.1.tar.gz dest=/usr/local/src/ timeout=60
+  when: not file_exists.stat.exists
+
+- name: unarchive grafana tarball
+  unarchive: src=/usr/local/src/grafana-1.8.1.tar.gz dest=/opt/ copy=no
+  when: not file_exists.stat.exists
+
+- name: rename grafana dir
+  file: src=/opt/grafana-1.8.1 dest=/opt/grafana state=link
+  when: not file_exists.stat.exists
+
+- name: set json generate files
+  action: synchronize src=grafana/json/ dest=/opt/grafana/json/ archive=yes delete=yes rsync_path='sudo rsync'
+
+- name: set scripted file
+  copy: src=grafana/scripted.js dest=/opt/grafana/app/dashboards/scripted.js
+
+## Grafanaの設定ファイル設置
+- name: configure grafana config.js
+  template: src=config.js dest=/opt/grafana/config.js

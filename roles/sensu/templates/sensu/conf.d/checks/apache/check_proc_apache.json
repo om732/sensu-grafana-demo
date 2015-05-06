@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_proc_apache": {
+      "command": "check-procs.rb -p httpd -C 1 ",
+      "subscribers": [
+        "apache"
+      ],
+      "handlers": [
+        "mailer-emerg"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "apacheのプロセス監視"
+    }
+  }
+}

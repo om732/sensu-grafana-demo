@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_network": {
+      "type": "metric",
+      "command": "netif-metrics.rb",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "ネットワーク情報の取得"
+    }
+  }
+}

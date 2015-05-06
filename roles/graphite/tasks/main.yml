@@ -1,0 +1,6 @@
+---
+- include: graphite.yml
+- include: elasticsearch.yml
+- include: grafana.yml
+- include: apache.yml
+- include: nginx.yml

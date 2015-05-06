@@ -1,0 +1,13 @@
+- name: set localtime
+  command: cp -a /usr/share/zoneinfo/Asia/Tokyo  /etc/localtime
+
+- name: set clock
+  lineinfile: dest=/etc/sysconfig/clock
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+      - { regexp: '^ZONE=', line: 'ZONE="Asia/Tokyo"'}
+      - { regexp: '^#?UTC=', line: 'UTC="False"'}
+
+- name: set locale
+  command: localedef -f UTF-8 -i ja_JP ja_JP.utf8

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_status_elasticsearch": {
+      "command": "check-es-single-status.rb -h :::elasticsearch.host::: -p :::elasticsearch.port::: -t :::elasticsearch.timeout:::",
+      "subscribers": [
+        "elasticsearch"
+      ],
+      "handlers": [
+        "mailer-crit"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "ElasticSearchのステータス監視"
+    }
+  }
+}

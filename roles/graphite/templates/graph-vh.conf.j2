@@ -1,0 +1,19 @@
+server {
+    listen       80;
+    server_name  graph;
+
+    #include bizconf/auth.conf;
+    include bizconf/proxy.conf;
+
+    location /es {
+        proxy_pass {{ elasticsearch_url }};
+    }
+
+    location /graphite {
+        proxy_pass {{ graphite_web_url }};
+    }
+
+    location / {
+        proxy_pass {{ grafana_url }};
+    }
+}

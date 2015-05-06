@@ -1,0 +1,20 @@
+# Tomcat8の設置
+- get_url: url=http://ftp.kddilabs.jp/infosystems/apache/tomcat/tomcat-8/v8.0.21/bin/apache-tomcat-8.0.21.tar.gz dest=/usr/local/src/ timeout=60
+
+# 解凍
+- unarchive: src=/usr/local/src/apache-tomcat-8.0.21.tar.gz dest=/opt/ copy=no
+
+# シンボリックリンク
+- file: src=/opt/apache-tomcat-8.0.21 dest=/opt/apache-tomcat8 state=link
+
+# 起動スクリプト
+- copy: src=setenv.sh dest=/opt/apache-tomcat8/bin/setenv.sh mode=0755
+
+# 起動スクリプト
+- copy: src=tomcat-init dest=/etc/init.d/tomcat mode=0755
+
+# jolokiaの設置
+- get_url: url=http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.2.3/jolokia-jvm-1.2.3-agent.jar dest=/opt/apache-tomcat8/lib/ timeout=60
+
+- name: start tomcat
+  service: name=tomcat state=restarted enabled=yes

@@ -1,0 +1,17 @@
+- name: stop services
+  service: name={{ item }} state=stopped enabled=no
+  with_items:
+      - ip6tables
+      - iptables
+      - auditd
+      - iscsi
+      - iscsid
+      - rpcbind
+      - rpcgssd
+      - rpcidmapd
+      - netfs
+      - lvm2-monitor
+      - mdmonitor
+      - blk-availability
+      - udev-post
+      - nfslock

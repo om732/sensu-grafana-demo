@@ -1,0 +1,17 @@
+---
+# Usage: ansible-playbook -i inventories/hosts sensu-client.yml
+#
+# 実行前に以下を実施すること
+# 1. group_vars/sensu-clients の設定
+# 2. host_vars/xxx の設定
+#
+- name: Sensu Client
+  hosts: sensu-clients
+  sudo: yes
+  user: vagrant
+  gather_facts: on
+  roles:
+    - base
+    - { role: java,   when: tomcat_install is defined }
+    - { role: tomcat, when: tomcat_install is defined }
+    - sensu

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_proc_nginx": {
+      "command": "check-procs.rb -p nginx -C 1 ",
+      "subscribers": [
+        "nginx"
+      ],
+      "handlers": [
+        "mailer-emerg"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "nginxのプロセス監視"
+    }
+  }
+}

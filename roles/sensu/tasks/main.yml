@@ -1,0 +1,11 @@
+---
+- include: rabbitmq.yml
+  when: sensu_install_server
+
+- include: redis.yml
+  when: sensu_install_server
+
+- include: sensu.yml
+
+- include: uchiwa.yml
+  when: sensu_install_server

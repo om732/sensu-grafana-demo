@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_disk_usage": {
+      "type": "metric",
+      "command": "disk-usage-metrics.rb",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "ディスク利用状況の取得"
+    }
+  }
+}

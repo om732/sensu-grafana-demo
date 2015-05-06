@@ -1,0 +1,51 @@
+{
+  "handlers": {
+    "mailer-emerg": {
+      "type": "pipe",
+      "command": "mailer.rb -k emerg",
+      "severities": [
+        "critical",
+        "ok"
+      ]
+    },
+    "mailer-crit": {
+      "type": "pipe",
+      "command": "mailer.rb -k crit",
+      "severities": [
+        "critical",
+        "ok"
+      ]
+    },
+    "mailer-warn": {
+      "type": "pipe",
+      "command": "mailer.rb -k warn",
+      "severities": [
+        "warning",
+        "ok"
+      ]
+    }
+  },
+  "mailer": {
+    "emerg": {
+      "subject"  : "{{sensu_alert_subject}} ",
+      "admin_gui": "",
+      "mail_from": "{{sensu_alert_from}}",
+      "mail_to"  : "{{sensu_alert_to_emerg}}",
+      "smtp_enable_starttls_auto": false
+    },
+    "crit": {
+      "subject"  : "{{sensu_alert_subject}} ",
+      "admin_gui": "",
+      "mail_from": "{{sensu_alert_from}}",
+      "mail_to"  : "{{sensu_alert_to_crit}}",
+      "smtp_enable_starttls_auto": false
+    },
+    "warn": {
+      "subject"  : "{{sensu_alert_subject}} ",
+      "admin_gui": "",
+      "mail_from": "{{sensu_alert_from}}",
+      "mail_to"  : "{{sensu_alert_to_warn}}",
+      "smtp_enable_starttls_auto": false
+    }
+  }
+}

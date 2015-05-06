@@ -1,0 +1,9 @@
+# javaの設置
+#- copy: src=server-jre-8u40-linux-x64.tar.gz dest=/usr/local/src/
+- command: wget --no-cookies --no-check-certificate --header 'Cookie:gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/8u40-b26/server-jre-8u40-linux-x64.tar.gz' chdir=/usr/local/src/
+
+# 解凍
+- unarchive: src=/usr/local/src/server-jre-8u40-linux-x64.tar.gz dest=/opt/ copy=no
+
+# シンボリックリンク
+- file: src=/opt/jdk1.8.0_40 dest=/opt/java state=link

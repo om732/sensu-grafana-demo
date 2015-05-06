@@ -1,0 +1,14 @@
+---
+## uchiwaのインストール
+- name: install uchiwa 
+  yum: name=uchiwa enablerepo=sensu state=present
+
+## uchiwa.jsonの設置
+- name: set uchiwa.json
+  template: src=sensu/uchiwa.json dest=/etc/sensu/uchiwa.json
+  notify:
+    - restart uchiwa
+
+## uchiwaの起動
+- name: start uchiwa
+  service: name=uchiwa state=started enabled=yes

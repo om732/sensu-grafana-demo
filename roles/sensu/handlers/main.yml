@@ -1,0 +1,17 @@
+- name: restart sensu server
+  service: name=sensu-{{ item }} state=restarted
+  with_items:
+    - server
+    - api
+  when: sensu_install_server
+
+- name: restart sensu client
+  service: name=sensu-client state=restarted sleep=2
+
+- name: restart rabbitmq server
+  service: name=rabbitmq-server state=restarted
+  when: sensu_install_server
+
+- name: restart uchiwa
+  service: name=uchiwa state=restarted
+  when: sensu_install_server

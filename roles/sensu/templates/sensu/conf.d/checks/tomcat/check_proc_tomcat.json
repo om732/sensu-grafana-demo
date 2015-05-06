@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check_proc_tomcat": {
+      "command": "check-procs.rb -p tomcat -C 1 ",
+      "subscribers": [
+        "tomcat"
+      ],
+      "handlers": [
+        "mailer-emerg"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "Tomcatのプロセス監視"
+    }
+  }
+}

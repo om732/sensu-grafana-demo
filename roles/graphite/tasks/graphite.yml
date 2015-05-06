@@ -1,0 +1,31 @@
+---
+## Graphiteのインストール
+- name: install graphite
+  yum: name=python-carbon,graphite-web,python-sqlite2 enablerepo=epel state=present
+
+## DB(sqlite)利用のための準備
+- name: create db directory
+  file: path=/etc/graphite-web/storage state=directory owner=apache group=apache
+
+## graphite-webの設定
+- name: configure graphite web
+  template: src=local_settings.py dest=/etc/graphite-web/local_settings.py
+  notify: restart carbon
+
+- name: configure storage-schemas
+  template: src=storage-schemas.conf.j2 dest=/etc/carbon/storage-schemas.conf
+  notify: restart carbon
+
+## graphite.dbが存在するか確認
+- name: check graphite.db file
+  stat: path=/etc/graphite-web/storage/graphite.db
+  register: stat_graphitedb
+
+## graphite.dbが存在しない場合、DBを作成、SQLを流し込む
+- name: import SQL
+  shell: sudo -u apache /usr/lib/python2.6/site-packages/graphite/manage.py syncdb --noinput
+  when: not stat_graphitedb.stat.exists
+
+## carbonの起動
+- name: start cabon
+  service: name=carbon-cache state=started enabled=yes

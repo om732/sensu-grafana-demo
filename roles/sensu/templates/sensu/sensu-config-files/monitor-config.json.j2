@@ -1,0 +1,31 @@
+{
+{% include "parts/sensu-server-base-config.json.j2" %}
+  "client": {
+    "name": "{{ inventory_hostname }}",
+    "address": "{{ ansible_eth0["ipv4"]["address"] }}",
+    "keepalive": {
+      "thresholds": {
+        "warning": 60,
+        "critical":180
+      },
+      "handlers": [
+        "default"
+      ],
+      "refresh": 43200
+    },
+    "subscriptions": [
+      "resource",
+      "rabbitmq"
+    ],
+    "resource": {
+      "load_warn": "5,3,3",
+      "load_crit": "10,6,6",
+      "disk_warn": 70,
+      "disk_crit": 80,
+      "swap_warn": 90,
+      "swap_crit": 70,
+      "users_warn": 20,
+      "users_crit": 50
+    }
+  }
+}

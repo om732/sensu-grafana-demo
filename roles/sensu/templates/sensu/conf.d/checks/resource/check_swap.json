@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "check_swap": {
+      "command": "check-swap-percentage.sh -w :::resource.swap_warn::: -c :::resource.swap_crit:::",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "mailer-warn",
+        "mailer-crit"
+      ],
+      "interval": 60,
+      "occurrences": 3,
+      "refresh": 86400,
+      "custom_summary": "スワップ利用率の監視"
+    }
+  }
+}

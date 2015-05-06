@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "metrics_cpu": {
+      "type": "metric",
+      "command": "cpu-pcnt-usage-metrics.rb",
+      "subscribers": [
+        "resource"
+      ],
+      "handlers": [
+        "graphite"
+      ],
+      "interval": 60,
+      "custom_summary": "CPU情報の監視"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+server {
+    listen       80;
+    server_name  sensu;
+
+    #include bizconf/auth.conf;
+    include bizconf/proxy.conf;
+
+    location / {
+        proxy_pass {{ uchiwa_url }};
+    }
+}

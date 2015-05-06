@@ -1,0 +1,18 @@
+#
+# この設定では、まっさらなApacheから設定することを想定している。
+# また、セキュリティ、パフォーマンスに関する設定は含めていないので、適宜設定を調整すること
+#
+
+##  Listenポート変更
+- name: configure listen
+  lineinfile: dest=/etc/httpd/conf/httpd.conf regexp="^Listen 80" line="Listen 8080" backrefs=yes
+  notify: restart apache
+
+## graphite-webの設定ファイル設置
+- name: set graphite-web
+  template: src=graphite-web.conf dest=/etc/httpd/conf.d/graphite-web.conf
+  notify: restart apache
+
+## apacheの起動
+- name: start apache
+  service: name=httpd state=started enabled=yes

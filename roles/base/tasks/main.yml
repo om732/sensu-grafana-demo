@@ -1,0 +1,7 @@
+---
+- include: localize.yml
+
+- include: chkconfig.yml
+
+- include: package.yml
+
